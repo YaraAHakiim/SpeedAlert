@@ -50,7 +50,7 @@ public class VoiceNotePlayer {
                     mMediaPlayer = new MediaPlayer();
             }
         } else {
-            mMediaPlayer = MediaPlayer.create(context, R.raw.Alert);
+            mMediaPlayer = MediaPlayer.create(context, R.raw.alert);
         }
 
         if (!mMediaPlayer.isPlaying()) {
