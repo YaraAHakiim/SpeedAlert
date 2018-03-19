@@ -29,37 +29,58 @@ dependencies {
 ```
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_LOCATION_PERMISSION_CODE = 101;
+    //Location permission request code
+        private static final int REQUEST_LOCATION_PERMISSION_CODE = 101;
 
-    private SpeedAlert mSpeedAlert;
+        //Declaring speed alert object to start tracking movement speed and play alerts
+        private SpeedAlert mSpeedAlert;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
 
-        mSpeedAlert = new SpeedAlert(this, 10);
-        mSpeedAlert.setMode(VoiceNotePlayer.Mode.ResourceId);
-        mSpeedAlert.setVoiceNoteResId(R.raw.alert);
-        
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mSpeedAlert.startUpdates(1, 1);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION_PERMISSION_CODE);
-        }
-    }
+            //Instantiating speed alert with context and max speed.
+            mSpeedAlert = new SpeedAlert(this, 10);
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+            //Setting alert mode and file, if not set a default alert will be played
 
-        if(requestCode == REQUEST_LOCATION_PERMISSION_CODE) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mSpeedAlert.startUpdates(1, 1);
+            //Setting alert mode to play from local file
+            mSpeedAlert.setAlertMode(AlertPlayer.Mode.DataFromLocalFile);
+            //Setting resource of the file
+            mSpeedAlert.setAlertResource(R.raw.alert);
+
+            //Setting alert mode to play from a url
+            //mSpeedAlert.setAlertMode(AlertPlayer.Mode.DataFromUrl);
+            //Setting url of the file
+            //mSpeedAlert.setAlertUrl("http://www.freesfx.co.uk/rx2/mp3s/5/16927_1461333031.mp3");
+
+            //Speed alert is based on GPS, so the location permission must be added to manifest and requested at runtime
+            //Checking if location permission is granted
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                //Start tracking movement speed by giving location & speed minimum update time and distance. (time is seconds, distance in meters)
+                mSpeedAlert.startTracking(1, 1);
+            } else {
+                //If location permission is not granted request it.
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION_PERMISSION_CODE);
             }
         }
-    }
-}
+
+        //Called when user respond to requesting permissions.
+        @Override
+        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+            //If location permission is granted start tracking.
+            if(requestCode == REQUEST_LOCATION_PERMISSION_CODE) {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    mSpeedAlert.startTracking(1, 1);
+                } else {
+                    Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
 ```
 
 ## License
