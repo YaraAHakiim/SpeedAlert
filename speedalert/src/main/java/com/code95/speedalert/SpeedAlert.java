@@ -8,15 +8,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
+
 
 /**
- * Created by YaRa on 3/4/2018.
- */
-
-/**
- * Speed Alert class is plays an alert when driving with maximum
- * speed.
+ * Speed Alert class monitors movement speed and
+ * plays an alert when exceeding set speed.
  *
  * @Author Yara Abdelhakim
  * @Version 1.0.0
@@ -28,9 +24,9 @@ public class SpeedAlert implements LocationListener {
     private LocationManager mLocationManager;
     private Context mContext;
     private double mMaxSpeed = 30;
-    private int mVoiceNoteResId ;
-    private String mVoiceNoteUrl;
-    private VoiceNotePlayer.Mode mMode;
+    private int mAlertResId;
+    private String mAlertUrl;
+    private AlertPlayer.Mode mAlertMode;
 
     /**
      * Constructor
@@ -52,7 +48,7 @@ public class SpeedAlert implements LocationListener {
      * @param minUpdateTime Minimum time before getting new updated location.
      * @param minUpdateDistance Minimum distance before getting new updated location.
      */
-    public void startUpdates(int minUpdateTime, int minUpdateDistance) {
+    public void startTracking(int minUpdateTime, int minUpdateDistance) {
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minUpdateTime, minUpdateDistance, this);
         }
@@ -61,7 +57,7 @@ public class SpeedAlert implements LocationListener {
     /**
      * Method used to stop getting location updates
      */
-    public void stopUpdates() {
+    public void stopTracking() {
         mLocationManager.removeUpdates(this);
     }
 
@@ -92,20 +88,20 @@ public class SpeedAlert implements LocationListener {
     private void playAlert(Location location) {
         double speedInKmH = location.getSpeed() * 3.6;
         if (speedInKmH >= mMaxSpeed) {
-            VoiceNotePlayer.playAudio(mContext, mVoiceNoteUrl, mVoiceNoteResId, mMode);
+            AlertPlayer.playAlert(mContext, mAlertUrl, mAlertResId, mAlertMode);
         }
     }
 
-    public void setVoiceNoteResId(int voiceNoteResId) {
-        this.mVoiceNoteResId = voiceNoteResId;
+    public void setAlertResource(int voiceNoteResId) {
+        this.mAlertResId = voiceNoteResId;
     }
 
-    public void setVoiceNoteUrl(String voiceNoteUrl) {
-        this.mVoiceNoteUrl = voiceNoteUrl;
+    public void setAlertUrl(String voiceNoteUrl) {
+        this.mAlertUrl = voiceNoteUrl;
     }
 
-    public void setMode(VoiceNotePlayer.Mode mode) {
-        this.mMode = mode;
+    public void setAlertMode(AlertPlayer.Mode mode) {
+        this.mAlertMode = mode;
     }
 
 }
