@@ -18,7 +18,7 @@ Step 2. Add the dependency:
 
 ```
 dependencies {
-	        compile 'com.github.YaraAHakiim:SpeedAlert:1.0.1'
+	        compile 'com.github.YaraAHakiim:SpeedAlert:1.0.2'
 	}
 ```
 
