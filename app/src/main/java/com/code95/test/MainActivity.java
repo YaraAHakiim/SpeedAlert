@@ -29,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
         //Instantiating speed alert with context and max speed.
         mSpeedAlert = new SpeedAlert(this, 10);
 
-        //Setting alert mode and file, if not set a default alert will be played
+        /*Setting alert mode and file, if not set a default alert will be played*/
 
         //Setting alert mode to play from local file
         mSpeedAlert.setAlertMode(AlertPlayer.Mode.DataFromLocalFile);
-        //Setting resource of the file
+        //Setting file resource
         mSpeedAlert.setAlertResource(R.raw.alert);
 
         //Setting alert mode to play from a url
@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         //Setting url of the file
         //mSpeedAlert.setAlertUrl("http://www.freesfx.co.uk/rx2/mp3s/5/16927_1461333031.mp3");
 
-        //Speed alert is based on GPS, so the location permission must be added to manifest and requested at runtime
+        /*Speed alert is based on GPS, so the location permission must be added to manifest and requested at runtime*/
+
         //Checking if location permission is granted
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             //Start tracking movement speed by giving location & speed minimum update time and distance. (time is seconds, distance in meters)
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         //If location permission is granted start tracking.
         if(requestCode == REQUEST_LOCATION_PERMISSION_CODE) {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                //Start tracking movement speed by giving location & speed minimum update time and distance. (time is seconds, distance in meters)
                 mSpeedAlert.startTracking(1, 1);
             } else {
                 Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
